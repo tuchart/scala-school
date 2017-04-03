@@ -40,8 +40,10 @@ object Competition extends App {
     for(r <- results) {
       if(r._2 > 0)finalResult = finalResult + 1
       else if (r._2 < 0) finalResult -= 1
+      else {}
     }
   if (finalResult == 0) print("Победила дружба")
-  if (finalResult > 0) print("Наша взяла")
-  if (finalResult < 0) print("Продули")
+  else if (finalResult > 0) print("Наша взяла")
+  else if (finalResult < 0) print("Продули")
+  else {}
 }
