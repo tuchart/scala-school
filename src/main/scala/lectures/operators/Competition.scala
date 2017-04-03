@@ -44,6 +44,5 @@ object Competition extends App {
     }
   if (finalResult == 0) print("Победила дружба")
   else if (finalResult > 0) print("Наша взяла")
-  else if (finalResult < 0) print("Продули")
-  else {}
+  else print("Продули")
 }
