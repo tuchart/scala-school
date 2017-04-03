@@ -64,7 +64,11 @@ object CurriedComputation extends App with Data {
 object FunctionalComputation extends App with Data {
 
   def functionalComputation(filterData: String): (Array[String]) => Array[String] = {
+    //EMULATE HEAVY LOAD
+    Thread.sleep(10)
     val function = Computation.computation _
+    //EMULATE HEAVY LOAD
+    Thread.sleep(100)
     function.curried(filterData)
   }
 
