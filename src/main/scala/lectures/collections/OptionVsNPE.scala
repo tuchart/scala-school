@@ -8,7 +8,7 @@ import scala.util.Random
   * Для успешного завершения задания, вы должны реализовать метод buisnessLogic в объекте OptionVsNPE
   * Этот метод должен делать следующее
   * * * * * Получить и распечатать результат или, если была ошибка ResourceException,
-  *         распечатать "Try again with new resource" и повторить все заново
+  * распечатать "Try again with new resource" и повторить все заново
   * * * * * Получить ресурс через ResourceProducer
   * * * * * Если ресурс не получен, кидать ResourceException (throw new ResourceException)
   * * * * * Если ресурс удачно получен, на его основе получить Connection
@@ -49,10 +49,10 @@ object ConnectionProducer extends FailUtil {
 }
 
 case class Connection(resource: Resource) {
-  private val defaultResult = "something went wrong!"
+  val defaultResult = "something went wrong!"
 
   //ConnectionProducer.result(this)
-  def result(): String = ???
+  def result(): String = ConnectionProducer.result(this)
 }
 
 case class Resource(name: String)
@@ -60,12 +60,24 @@ case class Resource(name: String)
 object OptionVsNPE extends App {
 
   def businessLogic: String = try {
-    // ResourceProducer
-    val result: String = ???
+    val resource = Option(ResourceProducer.produce)
+    if (resource.isEmpty) throw new ResourceException
+    val connection = getConnection(resource)
+
+    val result: String = (Option(connection.result()) orElse Option(new Connection(resource.get).defaultResult)).get
     println(result)
     result
   } catch {
-    case e: ResourceException => ???
+    case e: ResourceException => {
+      println("Try again with new resource")
+      businessLogic
+    }
+  }
+
+  def getConnection(resource: Option[Resource]): Connection = {
+    val connection = Option(ConnectionProducer.produce(resource.get))
+    if (connection.isEmpty) getConnection(resource)
+    else connection.get
   }
 
   businessLogic
